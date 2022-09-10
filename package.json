@@ -14,17 +14,33 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:todo-reminder.remindMe"
+    "*"
   ],
   "main": "./dist/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "todo-reminder.remindMe",
-        "title": "Hello todo-reminder"
-      }
-    ]
-  },
+		"commands": [
+			{
+				"command": "todo-reminder.remindMe",
+				"title": "Reminde Me",
+				"enablement": "!commentIsEmpty"
+			}
+		],
+		"menus": {
+			"commandPalette": [
+				{
+					"command": "todo-reminder.remindMe",
+					"when": "false"
+				}
+			],
+			"comments/commentThread/context": [
+				{
+					"command": "todo-reminder.remindMe",
+					"group": "inline",
+					"when": "commentController == todo-reminder && commentThreadIsEmpty"
+				}
+			]
+		}
+	},
   "scripts": {
     "vscode:prepublish": "npm run package",
     "compile": "webpack",
