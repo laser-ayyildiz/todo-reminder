@@ -1,8 +1,16 @@
 "use strict";
 
+import axios from "axios";
 import * as vscode from "vscode";
 
 let commentId = 1000;
+
+type Todo = {
+  body: string;
+  project: string;
+  filePath: string;
+  line: number;
+};
 
 class NoteComment implements vscode.Comment {
   id: number;
@@ -11,7 +19,7 @@ class NoteComment implements vscode.Comment {
   constructor(
     public body: string | vscode.MarkdownString,
     public mode: vscode.CommentMode,
-    public author: vscode.CommentAuthorInformation,
+    public author: vscode.CommentAuthorInformation
   ) {
     this.id = ++commentId;
     this.savedBody = this.body;
@@ -47,7 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   const getUser = async () => {
-    return "todo-reminder";
+    return "laser-ayyildiz";
   };
 
   const replyNote = async (reply: vscode.CommentReply) => {
@@ -56,9 +64,37 @@ export function activate(context: vscode.ExtensionContext) {
     const newReminder = new NoteComment(
       reply.text,
       vscode.CommentMode.Preview,
-      { name: user },
+      { name: user }
     );
 
+    const todo: Todo = {
+      body: reply.text,
+      project: "todo-reminder",
+      filePath: "src/extension.ts",
+      line: reply.thread.range.start.line,
+    };
+
+    const isTodoCreated = await createTodo(todo, user);
+    if (isTodoCreated) {
+      vscode.window.showInformationMessage(
+        "Be cool, i gotcha. I will remind you this todo ◝(ᵔᵕᵔ)◜"
+      );
+    } else {
+      vscode.window.showErrorMessage(
+        "Hey dude i have a problem 🥺 if you update me maybe i can solve the problem 🤔"
+      );
+      return;
+    }
+
     thread.comments = [newReminder];
+  };
+
+  const createTodo = async (todo: Todo, username: string) => {
+    return axios
+      .post(`http://localhost:8080/api/v1/todos?username=${username}`, todo)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((err) => console.log("error: ", err));
   };
 }
