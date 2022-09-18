@@ -23,10 +23,19 @@
         "command": "todo-reminder.remindMe",
         "title": "Reminde Me",
         "enablement": "!commentIsEmpty"
-      }
+      },
+      {
+				"command": "todo-reminder.getGitHubUser",
+				"title": "Get GitHub User",
+				"category": "GitHub Authentication Sample"
+			}
     ],
     "menus": {
       "commandPalette": [
+        {
+          "command": "todo-reminder.remindMe",
+          "when": "false"
+        },
         {
           "command": "todo-reminder.remindMe",
           "when": "false"
@@ -69,6 +78,7 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "axios": "^0.27.2"
+    "axios": "^0.27.2",
+    "@octokit/rest": "^18.0.0"
   }
 }
