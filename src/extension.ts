@@ -1,6 +1,6 @@
 import { Credentials } from "./user/credentials";
 import { replyNote } from "./comment-popup";
-import { connectGithub, User } from "./user";
+import { connectGithub, saveUser, User } from "./user";
 import {
   commands,
   CommentReply,

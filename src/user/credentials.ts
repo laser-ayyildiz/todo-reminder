@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
 import * as Octokit from "@octokit/rest";
-import { saveUser } from ".";
 
 const GITHUB_AUTH_PROVIDER_ID = "github";
 // The GitHub Authentication Provider accepts the scopes described here:
